@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đề Thi - Nhiều Đáp Án Đúng</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+    }
+    .question {
+      margin-bottom: 25px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+    input {
+      padding: 8px;
+      font-size: 14px;
+      width: 180px;
+    }
+    .result {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+    button {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Đề Thi - Nhập Số Liệu </h2>
+
+  <div class="question" data-answers="80000, 80.000">
+    <p><strong>Câu 1:</strong> Tính 2000 x 40 = .</p>
+    <input type="text" placeholder="Ví dụ: 3.14 hoặc π">
+    <button onclick="checkMultipleAnswers(this)">Kiểm tra</button>
+    <div class="result"></div>
+  </div>
+
+  <div class="question" data-answers="1000,1.000">
+    <p><strong>Câu 2:</strong> Nhập giá trị của 10^3 (nhiều cách viết được chấp nhận).</p>
+    <input type="text" placeholder="Ví dụ: 1000, 1e3">
+    <button onclick="checkMultipleAnswers(this)">Kiểm tra</button>
+    <div class="result"></div>
+  </div>
+
+  <script>
+    function normalizeInput(str) {
+      return str.trim().toLowerCase().replace(",", ".");
+    }
+
+    function checkMultipleAnswers(button) {
+      const container = button.closest('.question');
+      const input = container.querySelector('input');
+      const resultDiv = container.querySelector('.result');
+      const userInput = normalizeInput(input.value);
+
+      const answers = container.getAttribute('data-answers')
+                        .split(",")
+                        .map(ans => normalizeInput(ans));
+
+      let isCorrect = false;
+
+      // Kiểm tra nếu là số
+      const userNum = parseFloat(userInput);
+      for (const ans of answers) {
+        const ansNum = parseFloat(ans);
+        if (!isNaN(userNum) && !isNaN(ansNum)) {
+          if (Math.abs(userNum - ansNum) <= 0.01) {
+            isCorrect = true;
+            break;
+          }
+        } else if (userInput === ans) { // So sánh chuỗi (ví dụ "π")
+          isCorrect = true;
+          break;
+        }
+      }
+
+      if (isCorrect) {
+        resultDiv.textContent = "✅ Đúng!";
+        resultDiv.className = "result correct";
+      } else {
+        resultDiv.textContent = `❌ Sai! `;
+        resultDiv.className = "result incorrect";
+      }
+    }
+  </script>
+
+</body>
+</html>
